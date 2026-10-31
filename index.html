@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Для Снежанны ❤️ От Арсения</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rose-dark': '#120509',
+                        'rose-deep': '#240913',
+                        'rose-velvet': '#3b0d1e',
+                        'rose-main': '#ff4d8d',
+                        'rose-soft': '#ffb3c6',
+                        'rose-gold': '#f7cb9e',
+                        'rose-blush': '#fff0f5'
+                    },
+                    fontFamily: {
+                        script: ['Alex Brush', 'cursive'],
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        html, body {
+            background-color: #120509;
+            color: #fff0f5;
+            overflow-x: hidden;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        /* Ambient Canvas */
+        #love-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: auto;
+        }
+
+        /* Romantic Glassmorphism */
+        .glass-romantic {
+            background: linear-gradient(135deg, rgba(59, 13, 30, 0.65) 0%, rgba(36, 9, 19, 0.8) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(247, 203, 158, 0.35);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.7),
+                inset 0 1px 1px rgba(255, 179, 198, 0.4),
+                0 0 35px rgba(255, 77, 141, 0.15);
+            border-radius: 2rem;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-romantic:hover {
+            border-color: rgba(247, 203, 158, 0.65);
+            box-shadow: 
+                0 35px 70px rgba(0, 0, 0, 0.85),
+                inset 0 1px 2px rgba(255, 255, 255, 0.6),
+                0 0 50px rgba(255, 77, 141, 0.3);
+        }
+
+        /* Glowing Rose Gold Text */
+        .text-rose-glow {
+            color: #ffb3c6;
+            text-shadow: 
+                0 0 12px rgba(255, 77, 141, 0.6),
+                0 0 25px rgba(247, 203, 158, 0.4),
+                0 0 45px rgba(255, 179, 198, 0.3);
+        }
+
+        /* SVG Heart Pulse */
+        @keyframes heart-pulse-anim {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 77, 141, 0.6)); }
+            14% { transform: scale(1.15); filter: drop-shadow(0 0 30px rgba(255, 77, 141, 0.9)); }
+            28% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 77, 141, 0.6)); }
+            42% { transform: scale(1.15); filter: drop-shadow(0 0 30px rgba(255, 77, 141, 0.9)); }
+            70% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 77, 141, 0.6)); }
+        }
+        .animate-heartbeat {
+            animation: heart-pulse-anim 2.4s ease-in-out infinite;
+        }
+
+        /* 3D Compliment Card Flip */
+        .perspective-card {
+            perspective: 1200px;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Envelope Unfold Animation */
+        .envelope-flap {
+            transform-origin: top;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #120509; }
+        ::-webkit-scrollbar-thumb { background: #ff4d8d; border-radius: 10px; }
+    </style>
+</head>
+<body class="relative flex flex-col justify-between items-center px-4 py-6 sm:py-10 min-h-screen">
+
+    <!-- Interactive Canvas Backdrop: Hearts, Rose Petals & Light Dust -->
+    <canvas id="love-canvas"></canvas>
+
+    <!-- Main Container -->
+    <main id="app-root" class="relative z-10 w-full max-w-xl mx-auto flex flex-col items-center gap-6 sm:gap-8 my-auto">
+
+        <!-- Header Crown Badge -->
+        <div class="glass-romantic px-6 py-2.5 rounded-full text-xs sm:text-sm font-sans tracking-widest uppercase text-rose-gold flex items-center gap-3 border border-rose-gold/40 shadow-2xl">
+            <i class="fa-solid fa-heart text-rose-main animate-pulse"></i>
+            <span class="font-semibold">Снежанна & Арсений</span>
+            <i class="fa-solid fa-sparkles text-rose-soft"></i>
+        </div>
+
+        <!-- HERO CARD: Main Love Declaration & Heartbeat Engine -->
+        <div id="heroCard" class="glass-romantic w-full p-6 sm:p-10 text-center relative overflow-hidden group">
+            
+            <!-- SVG Beating Heart Component -->
+            <div class="relative w-32 h-32 mx-auto mb-6 cursor-pointer select-none animate-heartbeat" onclick="triggerHeartBurst(event)">
+                <svg viewBox="0 0 100 100" class="w-full h-full">
+                    <path d="M 50 88 C 20 65 5 45 5 28 A 22 22 0 0 1 43 14 L 50 22 L 57 14 A 22 22 0 0 1 95 28 C 95 45 80 65 50 88 Z" 
+                          fill="url(#heartGrad)" stroke="#f7cb9e" stroke-width="2.5" />
+                    <defs>
+                        <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff75a0" />
+                            <stop offset="50%" stop-color="#ff4d8d" />
+                            <stop offset="100%" stop-color="#ab0e44" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+
+            <!-- Dynamic Headline for Snezhanna -->
+            <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl text-rose-glow leading-tight mb-4 font-bold">
+                Снежанна — ты самая <br>
+                <span id="typewriterTarget" class="font-script text-4xl sm:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-rose-soft via-rose-gold to-white font-normal">
+                    красивая и милая!
+                </span>
+            </h1>
+
+            <p class="text-rose-blush/90 text-base sm:text-xl italic font-serif leading-relaxed mb-6 max-w-md mx-auto">
+                «Ты самое прекрасное, нежное и удивительное, что случилось в моей жизни...»
+            </p>
+
+            <!-- Ticking Live Time Widget -->
+            <div class="bg-black/50 border border-rose-gold/30 rounded-2xl p-4 mb-6 shadow-inner">
+                <div class="text-[11px] uppercase tracking-widest text-rose-gold font-sans mb-1 flex items-center justify-center gap-2">
+                    <i class="fa-regular fa-clock"></i>
+                    <span>Каждое мгновение рядом с тобой — счастье</span>
+                </div>
+                <div id="liveClockText" class="font-serif text-xl sm:text-2xl text-rose-soft font-bold">
+                    00:00:00
+                </div>
+            </div>
+
+            <!-- Interactive Petal Shower Button -->
+            <button onclick="triggerPetalShower()" class="w-full py-4 sm:py-5 px-6 rounded-2xl bg-gradient-to-r from-rose-main via-rose-600 to-rose-velvet text-white font-serif font-bold text-lg sm:text-xl shadow-2xl hover:brightness-110 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 border border-rose-soft/40">
+                <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
+                <span>Подарить океан нежности</span>
+            </button>
+        </div>
+
+        <!-- LETTER FROM ARSENIY (WAX SEAL ENVELOPE) -->
+        <div id="letterCard" class="glass-romantic w-full p-6 text-center relative overflow-hidden">
+            <h2 class="font-serif text-2xl text-rose-gold mb-3 flex items-center justify-center gap-2 font-bold">
+                <i class="fa-solid fa-envelope-open-text text-rose-main"></i>
+                Письмо для Снежанны
+            </h2>
+            <p class="text-xs text-rose-soft font-sans mb-5">Нажми на сургучную печать, чтобы открыть послание</p>
+
+            <!-- Wax Seal Envelope Visualizer -->
+            <div id="envelope" class="envelope relative w-full bg-rose-velvet/80 border border-rose-gold/40 rounded-2xl p-6 cursor-pointer select-none transition-all duration-500 overflow-hidden" onclick="toggleLetter()">
+                <!-- Wax Seal Badge -->
+                <div id="waxSeal" class="w-16 h-16 mx-auto rounded-full bg-gradient-to-tr from-rose-700 via-rose-main to-rose-gold border-2 border-rose-gold flex items-center justify-center shadow-lg transform transition-transform duration-300 hover:scale-110">
+                    <span class="font-serif font-bold text-white text-xl">А&С</span>
+                </div>
+
+                <!-- Hidden Letter Content -->
+                <div id="letterContent" class="max-h-0 opacity-0 transition-all duration-700 ease-in-out text-left mt-0 font-serif text-rose-blush text-base sm:text-lg leading-relaxed">
+                    <div class="border-t border-rose-gold/30 pt-4 mt-4 space-y-3">
+                        <p class="font-script text-3xl text-rose-soft">Любимая Снежанна,</p>
+                        <p>
+                            Спасибо тебе за твою бесконечную нежность, за твою добрую улыбку и за то, как ты освещаешь каждый мой день. 
+                        </p>
+                        <p>
+                            Рядом с тобой мир становится теплым, красивым и наполненным истинным смыслом. Я невероятно ценю каждую минуту, проведенную вместе.
+                        </p>
+                        <p class="text-right font-script text-3xl text-rose-gold pt-2">
+                            С любовью, твой Арсений ❤️
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPLIMENT GENERATOR CARD -->
+        <div class="glass-romantic w-full p-6 text-center relative overflow-hidden">
+            <div class="flex items-center justify-between px-2 mb-3">
+                <span class="text-3xl text-rose-soft">🌸</span>
+                <h3 class="font-serif text-xl text-rose-gold font-bold">Генератор Признаний</h3>
+                <span class="text-3xl text-rose-soft">🌸</span>
+            </div>
+
+            <div id="complimentBox" class="min-h-[60px] flex items-center justify-center text-sm sm:text-base text-rose-blush italic font-serif px-4 py-3 bg-black/40 rounded-xl border border-rose-gold/30 my-3 shadow-inner">
+                «Нажми на кнопку ниже, чтобы услышать еще одно признание от Арсения!»
+            </div>
+
+            <button onclick="generateCompliment(event)" class="w-full py-3 px-4 rounded-xl bg-rose-velvet/90 border border-rose-gold/50 text-sm font-sans font-semibold text-rose-gold hover:bg-rose-main hover:text-white transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-rotate"></i>
+                <span>Получить нежное слово</span>
+            </button>
+        </div>
+
+        <!-- 3D CARDS GRID: WHY SNEZHANNA IS SPECIAL -->
+        <div class="w-full">
+            <h2 class="font-serif text-center text-xl text-rose-gold mb-4 flex items-center justify-center gap-3 font-bold">
+                <i class="fa-solid fa-sparkles text-rose-main"></i>
+                <span>Почему ты особенная</span>
+                <i class="fa-solid fa-sparkles text-rose-main"></i>
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 perspective-card">
+                
+                <!-- Card 1 -->
+                <div class="flip-card h-44 cursor-pointer" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front glass-romantic flex flex-col items-center justify-center p-4 text-center border-rose-main/40">
+                            <span class="text-3xl text-rose-main mb-2">✨</span>
+                            <span class="font-serif text-sm text-rose-gold font-bold">Твоя Улыбка</span>
+                            <span class="text-[10px] text-rose-soft font-sans mt-3">Нажми</span>
+                        </div>
+                        <div class="card-back glass-romantic bg-rose-velvet/95 flex items-center justify-center p-4 text-center border-rose-main">
+                            <p class="text-xs text-rose-blush font-serif leading-relaxed">Освещает даже самый пасмурный день! 😊</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="flip-card h-44 cursor-pointer" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front glass-romantic flex flex-col items-center justify-center p-4 text-center border-rose-gold/40">
+                            <span class="text-3xl text-rose-gold mb-2">👁️</span>
+                            <span class="font-serif text-sm text-rose-gold font-bold">Твой Взгляд</span>
+                            <span class="text-[10px] text-rose-soft font-sans mt-3">Нажми</span>
+                        </div>
+                        <div class="card-back glass-romantic bg-rose-velvet/95 flex items-center justify-center p-4 text-center border-rose-gold">
+                            <p class="text-xs text-rose-blush font-serif leading-relaxed">В твоих глазах — целая вселенная нежности! 🌌</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="flip-card h-44 cursor-pointer" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front glass-romantic flex flex-col items-center justify-center p-4 text-center border-rose-main/40">
+                            <span class="text-3xl text-rose-main mb-2">💖</span>
+                            <span class="font-serif text-sm text-rose-gold font-bold">Твое Сердце</span>
+                            <span class="text-[10px] text-rose-soft font-sans mt-3">Нажми</span>
+                        </div>
+                        <div class="card-back glass-romantic bg-rose-velvet/95 flex items-center justify-center p-4 text-center border-rose-main">
+                            <p class="text-xs text-rose-blush font-serif leading-relaxed">Самое доброе, чуткое и любящее! ❤️</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="flip-card h-44 cursor-pointer" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front glass-romantic flex flex-col items-center justify-center p-4 text-center border-rose-gold/40">
+                            <span class="text-3xl text-rose-gold mb-2">👑</span>
+                            <span class="font-serif text-sm text-rose-gold font-bold">Ты Единственная</span>
+                            <span class="text-[10px] text-rose-soft font-sans mt-3">Нажми</span>
+                        </div>
+                        <div class="card-back glass-romantic bg-rose-velvet/95 flex items-center justify-center p-4 text-center border-rose-gold">
+                            <p class="text-xs text-rose-blush font-serif leading-relaxed">Моя самая любимая и родная Снежанна! 🌹</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 mt-10 text-center text-xs text-rose-soft/80 font-sans font-light">
+        <p>С бесконечной любовью для Снежанны от Арсения ❤️</p>
+    </footer>
+
+    <!-- Application Script Engine -->
+    <script>
+        /* === 1. ROMANTIC CANVAS: Hearts, Drifting Petals & Ripple Spark Trails === */
+        const canvas = document.getElementById('love-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        const pointer = { x: width / 2, y: height / 2, targetX: width / 2, targetY: height / 2 };
+        const ripples = [];
+        const loveSymbols = ['♥', '🌸', '✨', '💖', '🌹'];
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        window.addEventListener('pointermove', (e) => {
+            pointer.targetX = e.clientX;
+            pointer.targetY = e.clientY;
+        });
+
+        window.addEventListener('pointerdown', (e) => {
+            createRipple(e.clientX, e.clientY);
+        });
+
+        function createRipple(x, y) {
+            ripples.push({
+                x, y,
+                radius: 4,
+                opacity: 1,
+                color: `hsl(${Math.random() * 30 + 330}, 90%, 65%)`
+            });
+        }
+
+        class RomanticParticle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = height + Math.random() * 40;
+                this.size = Math.random() * 16 + 10;
+                this.speedY = Math.random() * 0.8 + 0.3;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.6 + 0.2;
+                this.symbol = loveSymbols[Math.floor(Math.random() * loveSymbols.length)];
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotSpeed = (Math.random() - 0.5) * 0.02;
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += Math.sin(this.y * 0.008) * 0.5 + this.speedX;
+                this.rotation += this.rotSpeed;
+
+                const dx = pointer.x - this.x;
+                const dy = pointer.y - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 110) {
+                    this.x -= (dx / dist) * 1.5;
+                    this.y -= (dy / dist) * 1.5;
+                }
+
+                if (this.y < -30) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.globalAlpha = this.opacity;
+                ctx.font = `${this.size}px "Cormorant Garamond", serif`;
+                ctx.fillStyle = (this.symbol === '♥' || this.symbol === '💖') ? '#ff4d8d' : '#f7cb9e';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.symbol, 0, 0);
+                ctx.restore();
+            }
+        }
+
+        const particles = Array.from({ length: Math.min(Math.floor(width / 16), 40) }, () => new RomanticParticle());
+
+        function renderCanvas() {
+            ctx.clearRect(0, 0, width, height);
+
+            pointer.x += (pointer.targetX - pointer.x) * 0.1;
+            pointer.y += (pointer.targetY - pointer.y) * 0.1;
+
+            for (let i = ripples.length - 1; i >= 0; i--) {
+                const r = ripples[i];
+                r.radius += 2.5;
+                r.opacity -= 0.02;
+
+                if (r.opacity <= 0) {
+                    ripples.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+                ctx.strokeStyle = r.color;
+                ctx.globalAlpha = r.opacity;
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(renderCanvas);
+        }
+
+        window.onload = function() {
+            renderCanvas();
+            startLiveClock();
+            initTypewriter();
+        };
+
+        /* === 2. LIVE CLOCK ENGINE === */
+        function startLiveClock() {
+            const clockText = document.getElementById('liveClockText');
+            setInterval(() => {
+                const now = new Date();
+                const hrs = String(now.getHours()).padStart(2, '0');
+                const mins = String(now.getMinutes()).padStart(2, '0');
+                const secs = String(now.getSeconds()).padStart(2, '0');
+                clockText.innerText = `${hrs}:${mins}:${secs}`;
+            }, 1000);
+        }
+
+        /* === 3. TYPEWRITER EFFECT === */
+        function initTypewriter() {
+            const phrases = ["красивая и милая!", "нежная и родная!", "самая невероятная!", "единственная моя!"];
+            let phraseIdx = 0;
+            let charIdx = 0;
+            let isDeleting = false;
+            const target = document.getElementById('typewriterTarget');
+
+            function type() {
+                const current = phrases[phraseIdx];
+                if (isDeleting) {
+                    target.innerText = current.substring(0, charIdx - 1);
+                    charIdx--;
+                } else {
+                    target.innerText = current.substring(0, charIdx + 1);
+                    charIdx++;
+                }
+
+                let speed = isDeleting ? 35 : 75;
+
+                if (!isDeleting && charIdx === current.length) {
+                    speed = 2200;
+                    isDeleting = true;
+                } else if (isDeleting && charIdx === 0) {
+                    isDeleting = false;
+                    phraseIdx = (phraseIdx + 1) % phrases.length;
+                    speed = 400;
+                }
+
+                setTimeout(type, speed);
+            }
+            type();
+        }
+
+        /* === 4. ENVELOPE UNFOLD TOGGLE === */
+        let isLetterOpen = false;
+        function toggleLetter() {
+            const envelope = document.getElementById('envelope');
+            const content = document.getElementById('letterContent');
+            const waxSeal = document.getElementById('waxSeal');
+            isLetterOpen = !isLetterOpen;
+
+            if (isLetterOpen) {
+                envelope.classList.add('open');
+                content.style.maxHeight = '500px';
+                content.style.opacity = '1';
+                waxSeal.style.transform = 'scale(0.8) rotate(12deg)';
+                confetti({
+                    particleCount: 20,
+                    spread: 60,
+                    origin: { y: 0.6 },
+                    colors: ['#ff4d8d', '#f7cb9e', '#fff0f5']
+                });
+            } else {
+                envelope.classList.remove('open');
+                content.style.maxHeight = '0px';
+                content.style.opacity = '0';
+                waxSeal.style.transform = 'scale(1) rotate(0deg)';
+            }
+        }
+
+        /* === 5. COMPLIMENT GENERATOR === */
+        const compliments = [
+            "«Снежанна, твоя улыбка делает каждый день особенным!» ❤️",
+            "«Рядом с тобой время останавливается!» ✨",
+            "«Ты самое прекрасное чудо в моей жизни!» 🌹",
+            "«Твоя нежность и забота бесценны!» 💖",
+            "«Я безумно рад, что ты есть у меня!» 🥰"
+        ];
+        let compIdx = 0;
+
+        function generateCompliment(e) {
+            const box = document.getElementById('complimentBox');
+            compIdx = (compIdx + 1) % compliments.length;
+            box.innerText = compliments[compIdx];
+
+            confetti({
+                particleCount: 18,
+                spread: 70,
+                origin: { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight },
+                colors: ['#ff4d8d', '#f7cb9e', '#ffb3c6']
+            });
+        }
+
+        /* === 6. PETAL SHOWER BURST === */
+        function triggerPetalShower() {
+            const duration = 3 * 1000;
+            const end = Date.now() + duration;
+            const colors = ['#ff4d8d', '#ffb3c6', '#f7cb9e', '#ffffff'];
+
+            (function frame() {
+                confetti({
+                    particleCount: 6,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: colors
+                });
+                confetti({
+                    particleCount: 6,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: colors
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+        }
+
+        function triggerHeartBurst(e) {
+            confetti({
+                particleCount: 25,
+                spread: 80,
+                origin: { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight },
+                colors: ['#ff4d8d', '#ff75a0', '#f7cb9e']
+            });
+        }
+    </script>
+</body>
+</html>
